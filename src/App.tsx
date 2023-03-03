@@ -2,7 +2,7 @@ import './App.css';
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { ChatClient } from './chat-client';
 
-const URL = 'wss://09xqig1wrd.execute-api.us-east-2.amazonaws.com/production/';
+const URL = 'wss://cuqsoxnkh4.execute-api.sa-east-1.amazonaws.com/production/';
 
 const App = () => {
   const socket = useRef<WebSocket | null>(null);
@@ -15,7 +15,7 @@ const App = () => {
     setIsConnected(true);
     name = prompt('Informe o seu nome:');
     if (name !== null && name !== "") {
-      
+
       socket.current?.send(JSON.stringify({ action: 'setName', name }));
     }
   }, []);
@@ -77,7 +77,7 @@ const App = () => {
     }
   }, []);
 
-  const onSendBotMessage = useCallback(() => { 
+  const onSendBotMessage = useCallback(() => {
     const message = prompt('Mensagem  para BOT ');
     if (message !== null && message !== "") {
       socket.current?.send(JSON.stringify({
@@ -85,7 +85,7 @@ const App = () => {
         message
       }));
     }
-   }, []);
+  }, []);
 
   const onDisconnect = useCallback(() => {
     if (isConnected) {
