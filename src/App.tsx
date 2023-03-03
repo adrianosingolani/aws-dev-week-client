@@ -2,8 +2,6 @@ import './App.css';
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { ChatClient } from './chat-client';
 
-const URL = 'wss://cuqsoxnkh4.execute-api.sa-east-1.amazonaws.com/production/';
-
 const App = () => {
   const socket = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -13,7 +11,7 @@ const App = () => {
 
   const onSocketOpen = useCallback(() => {
     setIsConnected(true);
-    name = prompt('Informe o seu nome:');
+    name = prompt('Qual o seu nome?');
     if (name !== null && name !== "") {
 
       socket.current?.send(JSON.stringify({ action: 'setName', name }));
@@ -41,14 +39,16 @@ const App = () => {
 
   const onConnect = useCallback(() => {
     if (socket.current?.readyState !== WebSocket.OPEN) {
-      socket.current = new WebSocket(URL);
-      socket.current.addEventListener('open', onSocketOpen);
-      socket.current.addEventListener('close', onSocketClose);
-      socket.current.addEventListener('message', (event) => {
-        onSocketMessage(event.data);
-      });
+      if (process.env.REACT_APP_WEBSOCKET_ENDPOINT) {
+        socket.current = new WebSocket(process.env.REACT_APP_WEBSOCKET_ENDPOINT);
+        socket.current.addEventListener('open', onSocketOpen);
+        socket.current.addEventListener('close', onSocketClose);
+        socket.current.addEventListener('message', (event) => {
+          onSocketMessage(event.data);
+        });
+      }
     }
-  }, []);
+  }, [onSocketOpen, onSocketClose, onSocketMessage]);
 
   useEffect(() => {
     return () => {
@@ -65,7 +65,7 @@ const App = () => {
         to,
       }));
     }
-  }, []);
+  }, [name]);
 
   const onSendPublicMessage = useCallback(() => {
     const message = prompt('Mensagem pública');
