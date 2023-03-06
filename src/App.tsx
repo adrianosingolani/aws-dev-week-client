@@ -6,7 +6,7 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [members, setMembers] = useState([]);
   const [chatRows, setChatRows] = useState<React.ReactNode[]>([]);
-  let name;
+  let name: any;
 
   const onSocketOpen = useCallback(() => {
     setIsConnected(true);
@@ -23,7 +23,7 @@ function App() {
     setChatRows([]);
   }, []);
 
-  const onSocketMessage = useCallback((dataStr) => {
+  const onSocketMessage = useCallback((dataStr: any) => {
     const data = JSON.parse(dataStr);
     if (data.members) {
       setMembers(data.members);
