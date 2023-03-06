@@ -1,8 +1,7 @@
-import './App.css';
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { ChatClient } from './chat-client';
 
-const App = () => {
+function App() {
   const socket = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [members, setMembers] = useState([]);
@@ -39,8 +38,8 @@ const App = () => {
 
   const onConnect = useCallback(() => {
     if (socket.current?.readyState !== WebSocket.OPEN) {
-      if (process.env.REACT_APP_WEBSOCKET_ENDPOINT) {
-        socket.current = new WebSocket(process.env.REACT_APP_WEBSOCKET_ENDPOINT);
+      if (import.meta.env.VITE_WEBSOCKET_ENDPOINT) {
+        socket.current = new WebSocket(import.meta.env.VITE_WEBSOCKET_ENDPOINT);
         socket.current.addEventListener('open', onSocketOpen);
         socket.current.addEventListener('close', onSocketClose);
         socket.current.addEventListener('message', (event) => {
@@ -105,4 +104,4 @@ const App = () => {
   />;
 }
 
-export default App;
+export default App
